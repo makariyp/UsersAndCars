@@ -7,14 +7,17 @@ import hiber.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainApp {
-   public static void main(String[] args) throws SQLException {
+   public static void main(String[] args) {
       AnnotationConfigApplicationContext context = 
             new AnnotationConfigApplicationContext(AppConfig.class);
 
       UserService userService = context.getBean(UserService.class);
+
+      List<User> list = new ArrayList<>();
 
       User user1 = new User("User1", "Lastname1", "user1@mail.ru");
       User user2 = new User("User2", "Lastname2", "user2@mail.ru");
@@ -26,10 +29,8 @@ public class MainApp {
       user3.setCar(new Car("Audi", 1));
       user4.setCar(new Car("Zhiguli", 86));
 
-      userService.add(user1);
-      userService.add(user2);
-      userService.add(user3);
-      userService.add(user4);
+      list.addAll(List.of(new User[]{user1, user2, user3, user4}));
+      list.forEach(userService::add);
 
       List<User> users = userService.listUserByCar("BMV", 13);
       for (User user : users) {
